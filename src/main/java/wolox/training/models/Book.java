@@ -3,11 +3,16 @@ package wolox.training.models;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Book<Subtitle> {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @Column(nullable = false, unique = true)
     private String isbn;
 
@@ -35,7 +40,7 @@ public class Book<Subtitle> {
     private int pages;
 
     public Book(String genre, String author, String image, String title, String subtitle,
-        String publisher, String year, int pages) {
+        String publisher, String year, int pages, String isbn) {
         this.genre = genre;
         this.author = author;
         this.image = image;
@@ -44,7 +49,7 @@ public class Book<Subtitle> {
         this.publisher = publisher;
         this.year = year;
         this.pages = pages;
-        this.isbn = UUID.randomUUID().toString();
+        this.isbn = isbn;
     }
 
     public String setGenre() {
@@ -57,6 +62,10 @@ public class Book<Subtitle> {
 
     public String getImage() {
         return image;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getSubtitle() {
@@ -75,8 +84,16 @@ public class Book<Subtitle> {
         return pages;
     }
 
-    public void setGenre(final String newGendre) {
-        genre = newGendre;
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setGenre(final String newGenre) {
+        genre = newGenre;
     }
 
     public void setAuthor(final String newAuthor) {
@@ -91,6 +108,10 @@ public class Book<Subtitle> {
         subtitle = newSubtitle;
     }
 
+    public void setTitle(final String newTitle) {
+        title = newTitle;
+    }
+
     public void setPublisher(final String newPublisher) {
         publisher = newPublisher;
     }
@@ -101,6 +122,10 @@ public class Book<Subtitle> {
 
     public void setPages(final int newPages) {
         pages = newPages;
+    }
+
+    public void setIsbn(final String newIsbn) {
+        isbn = newIsbn;
     }
 
 }
