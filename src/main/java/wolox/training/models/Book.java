@@ -92,8 +92,8 @@ public class Book<Subtitle> {
         return id;
     }
 
-    public void setGenre(final String newGendre) {
-        genre = newGendre;
+    public void setGenre(final String newGenre) {
+        genre = newGenre;
     }
 
     public void setAuthor(final String newAuthor) {
