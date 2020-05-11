@@ -75,31 +75,31 @@ public class Book<Subtitle> {
         return pages;
     }
 
-    public void setGenre(String newGendre) {
+    public void setGenre(final String newGendre) {
         genre = newGendre;
     }
 
-    public void setAuthor(String newAuthor) {
+    public void setAuthor(final String newAuthor) {
         author = newAuthor;
     }
 
-    public void setImage(String newImage) {
+    public void setImage(final String newImage) {
         image = newImage;
     }
 
-    public void setSubtitle(String newSubtitle) {
+    public void setSubtitle(final String newSubtitle) {
         subtitle = newSubtitle;
     }
 
-    public void setPublisher(String newPublisher) {
+    public void setPublisher(final String newPublisher) {
         publisher = newPublisher;
     }
 
-    public void setYear(String newYear) {
+    public void setYear(final String newYear) {
         year = newYear;
     }
 
-    public void setPages(int newPages) {
+    public void setPages(final int newPages) {
         pages = newPages;
     }
 
