@@ -41,13 +41,20 @@ public class BookController {
 
     @GetMapping("/author/{bookAuthor}")
     public Book findOneByAuthor(@PathVariable String bookAuthor) {
-        return bookRepository.findByAuthor(bookAuthor);
+        return bookRepository.findOneByAuthor(bookAuthor)
+            .orElseThrow(AuthorDoesNotHaveBooksException::new);
     }
 
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id)
             .orElseThrow(BookNotFoundException::new);
+    }
+
+    @GetMapping("/isbn/{isbn}")
+    public Book findOne(@PathVariable String isbn) {
+        return bookRepository.findByIsbn(isbn)
+            .orElseThrow(IsbnDoesNotBelongToAnyBookException::new);
     }
 
     @PostMapping
@@ -61,6 +68,27 @@ public class BookController {
         bookRepository.findById(id)
             .orElseThrow(BookNotFoundException::new);
         bookRepository.deleteById(id);
+    }
+
+    @DeleteMapping("/author/{author}")
+    public void delete(@PathVariable String author) {
+        bookRepository.findOneByAuthor(author)
+            .orElseThrow(AuthorDoesNotHaveBooksException::new);
+        bookRepository.deleteByAuthor(author);
+    }
+
+    @DeleteMapping("/publisher/{publisher}")
+    public void delete(@PathVariable String publisher) {
+        bookRepository.findOneByPublisher(publisher)
+            .orElseThrow(PublisherDoesNotHaveBooksException::new);
+        bookRepository.deleteByPublisher(publisher);
+    }
+
+    @DeleteMapping("/isbn/{isbn}")
+    public void delete(@PathVariable String isbn) {
+        bookRepository.findByIsbn(isbn)
+            .orElseThrow(IsbnDoesNotBelongToAnyBookException::new);
+        bookRepository.deleteByIsbn(isbn);
     }
 
     @PutMapping("/{id}")
