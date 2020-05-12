@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -44,8 +45,6 @@ public class Book {
     @ManyToMany(mappedBy = "books", cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private List<User> users;
 
-    public Book(){}
-
     public Book(final String genre, final String author, final String image, final String title, final String subtitle,
         final String publisher, final String year, final int pages, final String isbn) {
         this.genre = genre;
@@ -57,6 +56,7 @@ public class Book {
         this.year = year;
         this.pages = pages;
         this.isbn = isbn;
+        this.users = new ArrayList<>();
     }
 
     public String getGenre() {
