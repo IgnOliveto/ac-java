@@ -13,6 +13,8 @@ import wolox.training.models.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findOneByAuthor(String author);
 
+    Book findById(Long id);
+
     Optional<Book> findOneByPublisher(String publisher);
 
     List<Book> findByTitle(String title);

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import wolox.training.exceptions.AuthorDoesNotHaveBooksException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+import wolox.training.exceptions.*;
 
 @RestController
 @RequestMapping("api/books")
@@ -41,20 +43,27 @@ public class BookController {
 
     @GetMapping("/author/{bookAuthor}")
     public Book findOneByAuthor(@PathVariable String bookAuthor) {
-        return bookRepository.findOneByAuthor(bookAuthor)
-            .orElseThrow(AuthorDoesNotHaveBooksException::new);
+            return bookRepository.findOneByAuthor(bookAuthor)
+                .orElseThrow(AuthorDoesNotHaveBooksException::new);
     }
 
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
-        return bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
+        try {
+            return bookRepository.findById(id);
+        } catch (BookNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/isbn/{isbn}")
     public Book findOne(@PathVariable String isbn) {
-        return bookRepository.findByIsbn(isbn)
-            .orElseThrow(IsbnDoesNotBelongToAnyBookException::new);
+        try {
+            return bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IsbnDoesNotBelongToAnyBookException("The isbn is not correct."));
+        } catch (IsbnDoesNotBelongToAnyBookException e) {
+            e.printStackTrace();
+        }
     }
 
     @PostMapping
@@ -64,40 +73,62 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
+    public void deleteById(@PathVariable Long id) {
+        try {
+            bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("The book does not exist."));
+        } catch (BookNotFoundException e) {
+            e.printStackTrace();
+        }
         bookRepository.deleteById(id);
     }
 
     @DeleteMapping("/author/{author}")
-    public void delete(@PathVariable String author) {
-        bookRepository.findOneByAuthor(author)
-            .orElseThrow(AuthorDoesNotHaveBooksException::new);
+    public void deleteAllByAuthor(@PathVariable String author) {
+        try {
+            bookRepository.findOneByAuthor(author)
+                .orElseThrow(() -> new AuthorDoesNotHaveBooksException("Author does not have any book."));
+        } catch (AuthorDoesNotHaveBooksException error) {
+            error.printStackTrace();
+        }
         bookRepository.deleteByAuthor(author);
     }
 
     @DeleteMapping("/publisher/{publisher}")
-    public void delete(@PathVariable String publisher) {
-        bookRepository.findOneByPublisher(publisher)
-            .orElseThrow(PublisherDoesNotHaveBooksException::new);
+    public void deleteAllByPublisher(@PathVariable String publisher) {
+        try {
+            bookRepository.findOneByPublisher(publisher)
+                .orElseThrow(() -> new PublisherDoesNotHaveBooksException("Publisher has not published any book."));
+        } catch (PublisherDoesNotHaveBooksException error) {
+            error.printStackTrace();
+        }
         bookRepository.deleteByPublisher(publisher);
     }
 
     @DeleteMapping("/isbn/{isbn}")
-    public void delete(@PathVariable String isbn) {
-        bookRepository.findByIsbn(isbn)
-            .orElseThrow(IsbnDoesNotBelongToAnyBookException::new);
+    public void deleteByIsbn(@PathVariable String isbn) {
+        try {
+            bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new IsbnDoesNotBelongToAnyBookException("The isbn is not correct."));
+        } catch (IsbnDoesNotBelongToAnyBookException error) {
+            error.printStackTrace();
+        }
         bookRepository.deleteByIsbn(isbn);
     }
 
     @PutMapping("/{id}")
     public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
-        if (book.getId() != id) {
-            throw new BookIdMismatchException();
+        try {
+            if (book.getId() != id) {
+                throw new BookIdMismatchException("The input book Id does not match with params Id.");
+            }
+            bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("The book does not exist."));
+            return bookRepository.save(book);
+        } catch (BookIdMismatchException error) {
+            error.printStackTrace();
+        } catch (BookNotFoundException error) {
+            error.printStackTrace();
         }
-        bookRepository.findById(id)
-            .orElseThrow(BookNotFoundException::new);
-        return bookRepository.save(book);
     }
 }
