@@ -39,8 +39,8 @@ public class Book<Subtitle> {
     @Column(nullable = false)
     private int pages;
 
-    public Book(String genre, String author, String image, String title, String subtitle,
-        String publisher, String year, int pages, String isbn) {
+    public Book(final String genre, final String author, final String image, final String title, final String subtitle,
+        final String publisher, final String year, final int pages, final String isbn) {
         this.genre = genre;
         this.author = author;
         this.image = image;
