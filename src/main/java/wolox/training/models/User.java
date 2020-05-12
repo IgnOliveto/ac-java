@@ -33,8 +33,9 @@ public class User {
 
     public User(){}
 
-    public User(final String username, final LocalDate birthDate) {
+    public User(final String username, final String name, final LocalDate birthDate) {
         this.username = username;
+        this.name = name;
         this.birthDate = birthDate;
         this.books = new ArrayList<>();
     }
