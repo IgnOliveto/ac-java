@@ -72,9 +72,6 @@ public class User {
     }
 
     public void addBook(Book book) {
-        if (books.contains(book)) {
-            throw new BookAlreadyOwnedException(this.username, book);
-        }
         books.add(book);
     }
 
