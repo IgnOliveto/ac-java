@@ -1,10 +1,13 @@
 package wolox.training.models;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Book {
@@ -37,6 +40,9 @@ public class Book {
 
     @Column(nullable = false)
     private int pages;
+
+    @ManyToMany(mappedBy = "books", cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    private List<User> users;
 
     public Book(){}
 
