@@ -1,7 +1,7 @@
 package wolox.training.exceptions;
 
-public class PublisherDoesNotHaveBooksException extends Exception {
-    public PublisherDoesNotHaveBooksException(String errorMessage) {
-        super(errorMessage);
+public class PublisherDoesNotHaveBooksException extends RuntimeException {
+    public PublisherDoesNotHaveBooksException(String publisher) {
+        super("Publisher " + publisher + " does not have any book.");
     }
 }

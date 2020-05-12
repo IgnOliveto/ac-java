@@ -1,7 +1,7 @@
 package wolox.training.exceptions;
 
-public class AuthorDoesNotHaveBooksException extends Exception {
-    public AuthorDoesNotHaveBooksException() {
-        super("Author does not have any book.");
+public class AuthorDoesNotHaveBooksException extends RuntimeException {
+    public AuthorDoesNotHaveBooksException(String author) {
+        super("Author " + author + " does not have any book.");
     }
 }
