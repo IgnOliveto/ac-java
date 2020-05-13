@@ -61,6 +61,14 @@ public class BookController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody final Book book) {
+        if (book.getIsbn().isEmpty() || book.getTitle().isEmpty() || book.getSubtitle().isEmpty() ||
+            book.getAuthor().isEmpty() || book.getImage().isEmpty() || book.getPublisher().isEmpty() ||
+            book.getYear().isEmpty() || book.getPages() <= 0) {
+            throw new EmptyNeccessaryAttributesException();
+        }
+        if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
+            throw new BookAlreadyExistsException(book.getIsbn());
+        }
         return bookRepository.save(book);
     }
 
