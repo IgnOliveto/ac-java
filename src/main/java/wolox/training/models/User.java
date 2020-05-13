@@ -74,6 +74,10 @@ public class User {
         books.add(book);
     }
 
+    public void deleteBook(Book book) {
+        books.removeIf(currentBook -> (currentBook.getId() == book.getId()));
+    }
+
     public void setName(final String name) {
         this.name = name;
     }

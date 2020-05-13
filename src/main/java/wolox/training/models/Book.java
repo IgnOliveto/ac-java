@@ -45,6 +45,8 @@ public class Book {
     @ManyToMany(mappedBy = "books", cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     private List<User> users;
 
+    public Book(){}
+
     public Book(final String genre, final String author, final String image, final String title, final String subtitle,
         final String publisher, final String year, final int pages, final String isbn) {
         this.genre = genre;

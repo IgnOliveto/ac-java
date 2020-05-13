@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserDoesNotExistException;
+import wolox.training.exceptions.UserDoesNotHaveAnyBookException;
+import wolox.training.exceptions.UserDoesNotHaveTheBookException;
 import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.models.Book;
 import wolox.training.models.User;
@@ -79,20 +81,38 @@ public class UserController {
     }
 
     private User addBook(Book book, User user) {
-        if (user.getBooks().contains(book)) {
-            throw new BookAlreadyOwnedException(user.getUsername(), book);
+       for (Book currentBook : user.getBooks()) {
+            if (currentBook.getId() == book.getId()) {
+                throw new BookAlreadyOwnedException(user.getUsername(), book);
+            }
         }
         user.addBook(book);
         return user;
     }
 
     @PutMapping("/books/add/{id}")
-    public User updateUserAttributes(@RequestBody final Book book, @PathVariable final Long id) {
+    public User addBookToUser(@RequestBody final Book book, @PathVariable final Long id) {
         bookRepository.findById(book.getId())
             .orElseThrow(() -> new BookNotFoundException(book.getId()));
         User userToUpdate = userRepository.findById(id)
             .orElseThrow(() -> new UserDoesNotExistException(id));
         User updatedUser = addBook(book, userToUpdate);
         return userRepository.save(updatedUser);
+    }
+
+    @PutMapping("/books/delete/{id}")
+    public User deleteBookToUser(@RequestBody final Book book, @PathVariable final Long id) {
+        User userToUpdate = userRepository.findById(id)
+            .orElseThrow(() -> new UserDoesNotExistException(id));
+        if (userToUpdate.getBooks().isEmpty()) {
+            throw new UserDoesNotHaveAnyBookException(id);
+        }
+        long booksTotalLength = userToUpdate.getBooks().size();
+        userToUpdate.deleteBook(book);
+        if (userToUpdate.getBooks().size() == booksTotalLength) {
+            throw new UserDoesNotHaveTheBookException(book);
+        }
+        userRepository.save(userToUpdate);
+        return userToUpdate;
     }
 }
