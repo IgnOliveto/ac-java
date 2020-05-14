@@ -1,7 +1,5 @@
 package wolox.training.controllers;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.EmptyNeccessaryAttributesException;
+import wolox.training.exceptions.FailedToCreateUserException;
 import wolox.training.exceptions.UserAlreadyExistsException;
 import wolox.training.exceptions.UserDoesNotExistException;
 import wolox.training.exceptions.UserDoesNotHaveAnyBookException;
@@ -54,13 +53,14 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody final User user) {
-        if ((user.getName().isEmpty()) || (user.getUsername().isEmpty()) || (user.getBirthDate() == null)) {
-            throw new EmptyNeccessaryAttributesException();
+        try {
+            if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
+                throw new UserAlreadyExistsException(user.getUsername());
+            }
+            return userRepository.save(user);
+        } catch(Exception e) {
+            throw new FailedToCreateUserException(e);
         }
-        if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException(user.getUsername());
-        }
-        return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}")
