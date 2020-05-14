@@ -1,6 +1,5 @@
 package wolox.training.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,11 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -28,8 +29,11 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.REFRESH})
+    @JoinTable(name = "book_users",
+        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "users_id",
+            referencedColumnName = "id"))
+    @ManyToMany(cascade = {CascadeType.ALL})
     private List<Book> books;
 
     @Column(nullable = false)
@@ -41,7 +45,7 @@ public class User {
         this.username = username;
         this.name = name;
         this.birthDate = birthDate;
-        this.books = new ArrayList<>();
+        this.books = new ArrayList();
     }
 
     public Long getId() {
@@ -76,6 +80,9 @@ public class User {
         books.add(book);
     }
 
+    public void setBooks(Book book) {
+        books.add(book);
+    }
     public void deleteBook(Book book) {
         books.removeIf(currentBook -> (currentBook.getId() == book.getId()));
     }
