@@ -1,14 +1,16 @@
 package wolox.training.models;
 
-import java.util.UUID;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
-public class Book<Subtitle> {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -39,6 +41,9 @@ public class Book<Subtitle> {
     @Column(nullable = false)
     private int pages;
 
+    @ManyToMany(mappedBy = "books", cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    private List<User> users;
+
     public Book(){}
 
     public Book(final String genre, final String author, final String image, final String title, final String subtitle,
@@ -54,11 +59,11 @@ public class Book<Subtitle> {
         this.isbn = isbn;
     }
 
-    public String setGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public String setAuthor() {
+    public String getAuthor() {
         return author;
     }
 
