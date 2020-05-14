@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +36,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "users_id",
             referencedColumnName = "id"))
     @ManyToMany(cascade = {CascadeType.ALL})
-    private List<Book> books;
+    private List<Book> books = new ArrayList();
 
     @Column(nullable = false)
     private LocalDate birthDate;
@@ -45,7 +47,6 @@ public class User {
         this.username = username;
         this.name = name;
         this.birthDate = birthDate;
-        this.books = new ArrayList();
     }
 
     public Long getId() {
