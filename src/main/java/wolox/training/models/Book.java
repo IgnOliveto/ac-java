@@ -46,7 +46,7 @@ public class Book {
     @ManyToMany
     @JsonIgnore
     @JoinColumn(name="book_id")
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     public Book(){}
 
