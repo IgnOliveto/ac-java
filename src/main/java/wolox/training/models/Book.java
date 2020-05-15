@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,7 +51,7 @@ public class Book {
     @ManyToMany
     @JsonIgnore
     @JoinColumn(name="book_id")
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 
     public Book(){}
 
@@ -94,6 +95,14 @@ public class Book {
 
     public String getYear() {
         return year;
+    }
+
+    public List<User> users() {
+        return Collections.unmodifiableList(users);
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public int getPages() {

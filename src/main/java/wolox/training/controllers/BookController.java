@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.AuthorDoesNotHaveBooksException;
 import wolox.training.models.Book;
+import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.exceptions.*;
 
@@ -101,7 +103,9 @@ public class BookController {
             if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
                 throw new BookAlreadyExistsException(book.getIsbn());
             }
-            return bookRepository.save(book);
+            Book bookToCreate = book;
+            bookToCreate.setUsers(new ArrayList<>());
+            return bookRepository.save(bookToCreate);
         } catch (Exception e) {
             throw new FailedToCreateBookException(e);
         }
