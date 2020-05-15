@@ -1,9 +1,9 @@
 package wolox.training.models;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
@@ -133,7 +133,7 @@ public class Book {
     public void setGenre(final String newGenre) {
         checkNotNull(newGenre, "Genre can not be null.");
         if (newGenre.length() > 0) {
-            Preconditions.checkArgument(newGenre.matches("^[ A-Za-z]+$"),
+            checkArgument(newGenre.matches("^[ A-Za-z]+$"),
                 "Genre must have only letters and spaces.");
         }
         genre = newGenre;
@@ -141,9 +141,9 @@ public class Book {
 
     public void setAuthor(final String newAuthor) {
         checkNotNull(newAuthor, "Author can not be null.");
-        Preconditions.checkArgument(newAuthor.matches("^[ A-Za-z]+$"),
+        checkArgument(newAuthor.matches("^[ A-Za-z]+$"),
             "Author name must have only letters and spaces.");
-        Preconditions.checkArgument(((newAuthor.length() <= MAX_NAME_LENGTH) && (newAuthor.length() >= MIN_NAME_LENGTH)),
+        checkArgument(((newAuthor.length() <= MAX_NAME_LENGTH) && (newAuthor.length() >= MIN_NAME_LENGTH)),
             "Author name must have between " + MIN_NAME_LENGTH + " and " + MAX_NAME_LENGTH + " characters.");
         author = newAuthor;
     }
@@ -155,43 +155,43 @@ public class Book {
 
     public void setSubtitle(final String newSubtitle) {
         checkNotNull(newSubtitle, "Subtitle can not be null.");
-        Preconditions.checkArgument(((newSubtitle.length() <= MAX_TITLE_LENGTH) && (newSubtitle.length() >= MIN_TITLE_LENGTH)),
+        checkArgument(((newSubtitle.length() <= MAX_TITLE_LENGTH) && (newSubtitle.length() >= MIN_TITLE_LENGTH)),
             "Subtitle must have between " + MIN_TITLE_LENGTH + " and " + MAX_TITLE_LENGTH + " characters.");
         subtitle = newSubtitle;
     }
 
     public void setTitle(final String newTitle) {
         checkNotNull(newTitle, "Title can not be null.");
-        Preconditions.checkArgument(((newTitle.length() <= MAX_TITLE_LENGTH) && (newTitle.length() >= MIN_TITLE_LENGTH)),
+        checkArgument(((newTitle.length() <= MAX_TITLE_LENGTH) && (newTitle.length() >= MIN_TITLE_LENGTH)),
             "Title must have between " + MIN_TITLE_LENGTH + " and " + MAX_TITLE_LENGTH + " characters.");
         title = newTitle;
     }
 
     public void setPublisher(final String newPublisher) {
         checkNotNull(newPublisher, "Publisher can not be null.");
-        Preconditions.checkArgument(((newPublisher.length() <= MAX_NAME_LENGTH) && (newPublisher.length() >= MIN_NAME_LENGTH)),
+        checkArgument(((newPublisher.length() <= MAX_NAME_LENGTH) && (newPublisher.length() >= MIN_NAME_LENGTH)),
             "Publisher must have between " + MIN_NAME_LENGTH + " and " + MAX_NAME_LENGTH + " characters.");
         publisher = newPublisher;
     }
 
     public void setYear(final String newYear) {
         checkNotNull(newYear, "Year can not be null.");
-        Preconditions.checkArgument(newYear.matches("^[0-9]+$"), "Year must have only numbers.");
-        Preconditions.checkArgument(Integer.parseInt(newYear) <= LocalDate.now().getYear(),
+        checkArgument(newYear.matches("^[0-9]+$"), "Year must have only numbers.");
+        checkArgument(Integer.parseInt(newYear) <= LocalDate.now().getYear(),
             "Year should be equal or less than the current year.");
         year = newYear;
     }
 
     public void setPages(final int newPages) {
         checkNotNull(newPages, "Pages can not be null.");
-        Preconditions.checkArgument(newPages >= MIN_PAGES_NUMBER, "Pages should be greater than " + MIN_PAGES_NUMBER +".");
+        checkArgument(newPages >= MIN_PAGES_NUMBER, "Pages should be greater than " + MIN_PAGES_NUMBER +".");
         pages = newPages;
     }
 
     public void setIsbn(final String newIsbn) {
         checkNotNull(newIsbn, "ISBN can not be null.");
-        Preconditions.checkArgument(newIsbn.matches("^[0-9]+$"), "ISBN must have only numbers.");
-        Preconditions.checkArgument(newIsbn.length() == ISBN_LENGTH, "ISBN must have " + ISBN_LENGTH + " characters.");
+        checkArgument(newIsbn.matches("^[0-9]+$"), "ISBN must have only numbers.");
+        checkArgument(newIsbn.length() == ISBN_LENGTH, "ISBN must have " + ISBN_LENGTH + " characters.");
         isbn = newIsbn;
     }
 

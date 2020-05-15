@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.Preconditions;
@@ -76,11 +77,11 @@ public class User {
 
     public void setUsername(final String username) {
         checkNotNull(username, "Username can not be null.");
-        Preconditions.checkArgument(((username.length() <= MAX_USERNAME_LENGTH) && (username.length() >= MIN_USERNAME_LENGTH)),
+        checkArgument(((username.length() <= MAX_USERNAME_LENGTH) && (username.length() >= MIN_USERNAME_LENGTH)),
             "Username must have between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
-        Preconditions.checkArgument(username.matches("^.*[a-zA-Z]+.*$"),
+        checkArgument(username.matches("^.*[a-zA-Z]+.*$"),
             "Username should at least one letter.");
-        Preconditions.checkArgument(username.matches("^[a-zA-Z0-9._]*$"),
+        checkArgument(username.matches("^[a-zA-Z0-9._]*$"),
             "Username should have only letters, numbers, dots or underscores.");
 
         this.username = username;
@@ -88,8 +89,8 @@ public class User {
 
     public void setBirthDate(final LocalDate birthDate) {
         checkNotNull(birthDate, "Birth date can not be null.");
-        Preconditions.checkArgument(birthDate.isBefore(LocalDate.now()), "Birth date should be previous than today.");
-        Preconditions.checkArgument((LocalDate.now().getYear() - birthDate.getYear()) < MAX_AGE,
+        checkArgument(birthDate.isBefore(LocalDate.now()), "Birth date should be previous than today.");
+        checkArgument((LocalDate.now().getYear() - birthDate.getYear()) < MAX_AGE,
             "User can not have more than " + MAX_AGE+ " years.");
         this.birthDate = birthDate;
     }
@@ -110,9 +111,9 @@ public class User {
 
     public void setName(final String name) {
         checkNotNull(name, "Name can not be null.");
-        Preconditions.checkArgument(((name.length() <= MAX_NAME_LENGTH) && (name.length() >= MIN_NAME_LENGTH)),
+        checkArgument(((name.length() <= MAX_NAME_LENGTH) && (name.length() >= MIN_NAME_LENGTH)),
             "Name must have between " + MIN_NAME_LENGTH + " and " + MAX_NAME_LENGTH + " characters.");
-        Preconditions.checkArgument(name.matches("^[ A-Za-z]+$"), "Name must have only letters and spaces.");
+        checkArgument(name.matches("^[ A-Za-z]+$"), "Name must have only letters and spaces.");
         this.name = name;
     }
 }
