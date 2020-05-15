@@ -61,7 +61,14 @@ public class BookController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody final Book book) {
-        return bookRepository.save(book);
+        try {
+            if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
+                throw new BookAlreadyExistsException(book.getIsbn());
+            }
+            return bookRepository.save(book);
+        } catch (Exception e) {
+            throw new FailedToCreateBookException(e);
+        }
     }
 
     @DeleteMapping("/{id}")

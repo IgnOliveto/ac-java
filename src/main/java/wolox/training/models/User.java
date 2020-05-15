@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,12 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import wolox.training.exceptions.BookAlreadyOwnedException;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -28,8 +31,12 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    private List<Book> books;
+    @JoinTable(name = "book_users",
+        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "users_id",
+            referencedColumnName = "id"))
+    @ManyToMany(cascade = {CascadeType.ALL})
+    private List<Book> books = new ArrayList();
 
     @Column(nullable = false)
     private LocalDate birthDate;
@@ -40,11 +47,10 @@ public class User {
         this.username = username;
         this.name = name;
         this.birthDate = birthDate;
-        this.books = new ArrayList<>();
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public String getUsername() {
@@ -72,10 +78,14 @@ public class User {
     }
 
     public void addBook(Book book) {
-        if (books.contains(book)) {
-            throw new BookAlreadyOwnedException(this.username, book);
-        }
         books.add(book);
+    }
+
+    public void setBooks(Book book) {
+        books.add(book);
+    }
+    public void deleteBook(Book book) {
+        books.removeIf(currentBook -> (currentBook.getId() == book.getId()));
     }
 
     public void setName(final String name) {

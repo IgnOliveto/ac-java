@@ -1,12 +1,14 @@
 package wolox.training.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -15,7 +17,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String isbn;
 
     private String genre;
@@ -41,7 +43,9 @@ public class Book {
     @Column(nullable = false)
     private int pages;
 
-    @ManyToMany(mappedBy = "books", cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToMany
+    @JsonIgnore
+    @JoinColumn(name="book_id")
     private List<User> users;
 
     public Book(){}
@@ -57,6 +61,7 @@ public class Book {
         this.year = year;
         this.pages = pages;
         this.isbn = isbn;
+        this.users = new ArrayList<>();
     }
 
     public String getGenre() {
