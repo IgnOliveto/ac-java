@@ -36,7 +36,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "users_id",
             referencedColumnName = "id"))
     @ManyToMany(cascade = {CascadeType.ALL})
-    private List<Book> books = new ArrayList();
+    private List<Book> books;
 
     @Column(nullable = false)
     private LocalDate birthDate;
@@ -81,8 +81,8 @@ public class User {
         books.add(book);
     }
 
-    public void setBooks(Book book) {
-        books.add(book);
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
     public void deleteBook(Book book) {
         books.removeIf(currentBook -> (currentBook.getId() == book.getId()));

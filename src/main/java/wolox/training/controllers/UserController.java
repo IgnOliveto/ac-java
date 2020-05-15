@@ -1,5 +1,7 @@
 package wolox.training.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,7 +59,9 @@ public class UserController {
             if (userRepository.findOneByUsername(user.getUsername()).isPresent()) {
                 throw new UserAlreadyExistsException(user.getUsername());
             }
-            return userRepository.save(user);
+            User userToCreate = user;
+            userToCreate.setBooks(new ArrayList<>());
+            return userRepository.save(userToCreate);
         } catch(Exception e) {
             throw new FailedToCreateUserException(e);
         }

@@ -15,17 +15,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findById(Long id);
 
-    Optional<Book> findOneByPublisher(String publisher);
-
     List<Book> findByTitle(String title);
 
     Optional<Book> findByIsbn(String isbn);
 
     void deleteById(Long id);
 
-    List<Book> deleteByAuthor(String author);
-
-    List<Book> deleteByPublisher(String publisher);
-
     Book deleteByIsbn(String isbn);
+
+    List<Book> findByAuthor(String author);
+
+    List<Book> findByPublisher(String publisher);
 }

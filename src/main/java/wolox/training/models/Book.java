@@ -1,7 +1,10 @@
 package wolox.training.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
 @Entity
+@ApiModel(description = "Books from the OpenLibraryAPI.")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +24,7 @@ public class Book {
     @Column(nullable = false)
     private String isbn;
 
+    @ApiModelProperty(value = "The book genre, could be horror, fantasy, comedy, etc.")
     private String genre;
 
     @Column(nullable = false)
@@ -90,6 +95,14 @@ public class Book {
 
     public String getYear() {
         return year;
+    }
+
+    public List<User> users() {
+        return Collections.unmodifiableList(users);
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public int getPages() {
